@@ -1,4 +1,4 @@
 SystemStatus
 ============
 
-System Status Web Interface
+System Status
