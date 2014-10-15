@@ -1,5 +1,5 @@
 <?php
-require("config.php");
+require("protected/config.php");
 ?>
 <!DOCTYPE html>
 <html>
