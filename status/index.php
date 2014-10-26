@@ -29,7 +29,7 @@ require("protected/config.php");
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="index.php">System Status</a>
+					<a class="navbar-brand" href="<?php echo($basedir); ?>">System Status</a>
 				</div>
 				<div class="collapse navbar-collapse navbar-ex1-collapse">
 					<ul class="nav navbar-nav pull-left">
@@ -54,7 +54,7 @@ require("protected/config.php");
 		<!-- Footer -->
 		<div id="footer">
 			<div class="container">
-				<p class="text-muted" align="center"><a href="https://github.com/dylanhansch/SystemStatus">System Status</a> | &copy; 2014 <a href="http://dylanhansch.net">Dylan Hansch</a>. All rights reserved.</p>
+				<p class="text-muted" align="center"><a href="https://github.com/dylanhansch/SystemStatus">System Status</a> | &copy; 2014 <a href="https://dylanhansch.net">Dylan Hansch</a>. All rights reserved.</p>
 			</div>
 		</div>	
 		<!-- End Footer -->
