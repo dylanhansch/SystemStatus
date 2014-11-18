@@ -1,2 +1,4 @@
-body {margin-top: 50px;}
-body {overflow-y:scroll;}
+body {
+	overflow-y:scroll;
+	margin-top:50px;
+}
