@@ -3,9 +3,9 @@ session_name("systemstatus");
 session_start();
 include_once("protected/config.php");
 
-/*if(file_exists("install.php")){
+if(file_exists("install.php")){
 	die("Before continuing to use this software, you must remove install.php");
-}*/
+}
 
 //checking is the sessions are set
 if(isset($_SESSION['username']) && isset($_SESSION['pass']) && isset($_SESSION['id'])){
