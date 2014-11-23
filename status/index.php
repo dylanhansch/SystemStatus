@@ -1,6 +1,23 @@
 <?php
 require_once("protected/config.php");
 require_once("global.php");
+
+function servers(){
+	global $mysqli;
+	
+	$stmt = $mysqli->prepare("SELECT name,location,host,type FROM servers ORDER BY id");
+	echo($mysqli->error);
+	$stmt->execute();
+	$stmt->bind_result($out_name,$out_location,$out_host,$out_type);
+	$servers = array();
+	
+	while($stmt->fetch()){
+		$servers[] = array('name' => $out_name, 'location' => $out_location, 'host' => $out_host, 'type' => $out_type);
+	}
+	$stmt->close();
+	
+	return $servers;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,7 +38,35 @@ require_once("global.php");
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
-					<h1><?php echo($name); ?> System Status</h1>
+					<div class="well" style="margin-top:25px">
+						<table class="table table-striped">
+							<tr>
+								<th>Status</th>
+								<th>Name</th>
+								<th>Type</th>
+								<th>Host</th>
+								<th>Location</th>
+								<th>Uptime</th>
+								<th>CPU Load</th>
+								<th>RAM (Free)</th>
+								<th>HDD (Free)</th>
+							</tr>
+							<?php $servers = servers();
+							foreach($servers as $server): ?>
+							<tr>
+								<td></td>
+								<td><?php echo($server['name']); ?></td>
+								<td><?php echo($server['type']); ?></td>
+								<td><?php echo($server['host']); ?></td>
+								<td><?php echo($server['location']); ?></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<?php endforeach; ?>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>

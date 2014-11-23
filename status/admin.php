@@ -18,6 +18,16 @@ if(isset($_GET['edituser'])){
 	$stmt->close();
 }
 
+if(isset($_GET['editserver'])){
+	$stmt = $mysqli->prepare("SELECT name FROM servers WHERE id = ?");
+	$stmt->bind_param('i', $_GET['editserver']);
+	$stmt->execute();
+	if($stmt->fetch()){
+		$editserverfetch = True;
+	}
+	$stmt->close();
+}
+
 if(isset($_GET['createuser'])){
 	$title = "Create User";
 	$createuser_message = "";
@@ -148,6 +158,91 @@ if(isset($_GET['createuser'])){
 			$stmt->close();
 		}
 	}
+}elseif(isset($_GET['createserver'])){
+	$title = "Create Server";
+	$createserver_message = "";
+	
+	if(isset($_POST['name'])){
+		$name = $_POST['name'];
+		$url = $_POST['url'];
+		$location = $_POST['location'];
+		$host = $_POST['host'];
+		$type = $_POST['type'];
+		
+		if( (!$name) || (!$url) || (!$location) || (!$host) || (!$type) ){
+			$createserver_message = "Please complete all the fields below.";
+		}else{
+			//check for duplicates
+			$stmt = $mysqli->prepare("SELECT name FROM `servers` WHERE `name` = ? LIMIT 1");
+			echo($mysqli->error);
+			$stmt->bind_param('s', $name);
+			$stmt->execute();
+			$stmt->bind_result($user_query);
+			if($stmt->fetch()){
+				if($user_query == $name){
+					$createserver_message = "That name is already in use.";
+				}
+			}else{
+				$stmt->close();
+				
+				// Insert into servers
+				$stmt = $mysqli->prepare("INSERT INTO servers (name, url, location, host, type) VALUES (?, ?, ?, ?, ?)");
+				echo($mysqli->error);
+				$stmt->bind_param('sssss', $name, $url, $location, $host, $type);
+				$stmt->execute();
+				
+				$createserver_message = "Server ".$name." now being monitored.";
+			}
+			$stmt->close();
+		}
+	}
+}elseif(isset($_GET['editserver']) && $editserverfetch == True){
+	$title = "Edit Server";
+	$editserver_message = "";
+	
+	$stmt = $mysqli->prepare("SELECT name,url,location,host,type FROM servers WHERE id = ?");
+	echo($mysqli->error);
+	$stmt->bind_param('i', $_GET['editserver']);
+	$stmt->execute();
+	$stmt->bind_result($e_name,$e_url,$e_location,$e_host,$e_type);
+	$stmt->fetch();
+	$stmt->close();
+	
+	if(isset($_POST['name'])){
+		$name = $_POST['name'];
+		$url = $_POST['url'];
+		$location = $_POST['location'];
+		$host = $_POST['host'];
+		$type = $_POST['type'];
+		
+		if( (!$name) || (!$url) || (!$location) || (!$host) || (!$type) ){
+			$createserver_message = "Please complete all the fields below.";
+		}else{
+			//check for duplicates
+			$stmt = $mysqli->prepare("SELECT name FROM servers WHERE id <> ? AND name = ?");
+			echo($mysqli->error);
+			$stmt->bind_param('is', $_GET['editserver'],$name);
+			$stmt->execute();
+			$stmt->bind_result($user_query);
+				
+			if($stmt->fetch()){
+				if($user_query == $name){
+					$editserver_message = "That name is already in use.";
+				}
+			}else{
+				$stmt->close();
+				
+				// Update the server
+				$stmt = $mysqli->prepare("UPDATE servers SET name = ?, url = ?, location = ?, host = ?, type = ? WHERE id = ?");
+				echo($mysqli->error);
+				$stmt->bind_param('sssssi', $name, $url, $location, $host, $type, $_GET['editserver']);
+				$stmt->execute();
+				
+				$editserver_message = "Server updated.";
+			}
+			$stmt->close();
+		}
+	}
 }else{
 	$title = "Admin";
 }
@@ -167,6 +262,23 @@ function users(){
 	$stmt->close();
 
 	return $users;
+}
+
+function servers(){
+	global $mysqli;
+	
+	$stmt = $mysqli->prepare("SELECT id,name,url,location,host,type FROM servers ORDER BY id");
+	echo($mysqli->error);
+	$stmt->execute();
+	$stmt->bind_result($out_id,$out_name,$out_url,$out_location,$out_host,$out_type);
+	$servers = array();
+	
+	while($stmt->fetch()){
+		$servers[] = array('id' => $out_id, 'name' => $out_name, 'url' => $out_url, 'location' => $out_location, 'host' => $out_host, 'type' => $out_type);
+	}
+	$stmt->close();
+	
+	return $servers;
 }
 ?>
 <!DOCTYPE html>
@@ -319,16 +431,119 @@ function users(){
 						</form>
 					</div>
 					
+					<?php }elseif(isset($_GET['createserver'])){ ?>
+					
+					<h1>Create Server</h1>
+					<ol class="breadcrumb">
+					  <li><a href="admin.php">Admin</a></li>
+					  <li class="active">Create</li>
+					</ol>
+					<div class="well">
+						<?php echo($createserver_message); ?>
+						<form class="form-signin" action="admin.php?createserver" method="post">
+							<div class="row">
+								<div class="col-sm-6">
+									<label for="name">Name</label>
+									<input type="text" class="form-control" name="name" placeholder="Ex. Web" required autofocus>
+								</div>
+								<div class="col-sm-6">
+									<label for="name">Type</label>
+									<input type="text" class="form-control" name="type" placeholder="Ex. Web + MySQL" required>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-sm-6">
+									<label for="name">Host</label>
+									<input type="text" class="form-control" name="host" placeholder="Ex. Advantage Servers" required>
+								</div>
+								<div class="col-sm-6">
+									<label for="name">Location</label>
+									<input type="text" class="form-control" name="location" placeholder="Ex. Hudson, WI" required>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="name">URL to remote.php on server</label>
+									<input type="text" class="form-control" name="url" placeholder="Ex. http://example.com/remote.php" required>
+								</div>
+							</div>
+							<br>
+							<input type="submit" class="btn btn-warning center" value="Create Server"/>
+						</form>
+					</div>
+					
+					<?php }elseif(isset($_GET['editserver']) && $editserverfetch == True){ ?>
+					
+					<h1>Edit Server</h1>
+					<ol class="breadcrumb">
+					  <li><a href="admin.php">Admin</a></li>
+					  <li class="active">Edit</li>
+					</ol>
+					<div class="well">
+						<?php echo($editserver_message); ?>
+						<form class="form-signin" action="admin.php?editserver=<?php echo($_GET['editserver']); ?>" method="post">
+							<div class="row">
+								<div class="col-sm-6">
+									<label for="name">Name</label>
+									<input type="text" class="form-control" name="name" value="<?php echo($e_name); ?>" required autofocus>
+								</div>
+								<div class="col-sm-6">
+									<label for="name">Type</label>
+									<input type="text" class="form-control" name="type" value="<?php echo($e_type); ?>" required>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-sm-6">
+									<label for="name">Host</label>
+									<input type="text" class="form-control" name="host" value="<?php echo($e_host); ?>" required>
+								</div>
+								<div class="col-sm-6">
+									<label for="name">Location</label>
+									<input type="text" class="form-control" name="location" value="<?php echo($e_location); ?>" required>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="name">URL to remote.php on server</label>
+									<input type="text" class="form-control" name="url" value="<?php echo($e_url); ?>" required>
+								</div>
+							</div>
+							<br>
+							<input type="submit" class="btn btn-warning center" value="Update Server"/>
+						</form>
+					</div>
+					
 					<?php }else{ ?>
 					
-					<h1>Manage Servers</h1>
+					<h1>Manage Servers <a href="?createserver" class="btn btn-sm btn-info">Create Server</a></h1>
 					<div class="well">
-						
+						<table class="table table-striped">
+							<tr>
+								<th>Name</th>
+								<th>Type</th>
+								<th>Host</th>
+								<th>Location</th>
+								<th>URL</th>
+							</tr>
+							<?php $servers = servers();
+							foreach($servers as $server): ?>
+							<tr>
+								<td><?php echo('<a href="'.$basedir.'admin.php?editserver='.$server['id'].'">'.$server['name'].'</a>'); ?></td>
+								<td><?php echo($server['type']); ?></td>
+								<td><?php echo($server['host']); ?></td>
+								<td><?php echo($server['location']); ?></td>
+								<td><?php echo($server['url']); ?></td>
+							</tr>
+							<?php endforeach; ?>
+						</table>
 					</div>
 					
 					<h1>Manage Users <a href="?createuser" class="btn btn-sm btn-info">Create User</a></h1>
 					<div class="well">
-						
 						<table class="table table-striped">
 							<tr>
 								<th>Username</th>
