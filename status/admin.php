@@ -9,8 +9,9 @@ if($logged == 0){
 }
 
 if(isset($_GET['edituser'])){
+	$edituser = $_GET['edituser'];
 	$stmt = $mysqli->prepare("SELECT username FROM users WHERE id = ?");
-	$stmt->bind_param('i', $_GET['edituser']);
+	$stmt->bind_param('i', $edituser);
 	$stmt->execute();
 	if($stmt->fetch()){
 		$edituserfetch = True;
@@ -19,8 +20,9 @@ if(isset($_GET['edituser'])){
 }
 
 if(isset($_GET['editserver'])){
+	$editserver = $_GET['editserver'];
 	$stmt = $mysqli->prepare("SELECT name FROM servers WHERE id = ?");
-	$stmt->bind_param('i', $_GET['editserver']);
+	$stmt->bind_param('i', $editserver);
 	$stmt->execute();
 	if($stmt->fetch()){
 		$editserverfetch = True;
@@ -100,7 +102,7 @@ if(isset($_GET['createuser'])){
 			$npass1 = crypt($npass1);
 			
 			$stmt = $mysqli->prepare("UPDATE users SET password = ? WHERE id = ?");
-			$stmt->bind_param('si', $npass1, $_GET['edituser']);
+			$stmt->bind_param('si', $npass1, $edituser);
 			$stmt->execute();
 			
 			$editpassword_message = "Password changed!";
@@ -113,7 +115,7 @@ if(isset($_GET['createuser'])){
 	
 	$stmt = $mysqli->prepare("SELECT username,email,firstname,lastname,role FROM users WHERE id = ?");
 	echo($mysqli->error);
-	$stmt->bind_param('i', $_GET['edituser']);
+	$stmt->bind_param('i', $edituser);
 	$stmt->execute();
 	$stmt->bind_result($e_username,$e_email,$e_firstname,$e_lastname,$e_role);
 	$stmt->fetch();
@@ -134,7 +136,7 @@ if(isset($_GET['createuser'])){
 			//check for duplicates
 			$stmt = $mysqli->prepare("SELECT username FROM users WHERE id <> ? AND (username = ? OR email = ?)");
 			echo($mysqli->error);
-			$stmt->bind_param('iss', $session_id,$username,$email);
+			$stmt->bind_param('iss', $edituser,$username,$email);
 			$stmt->execute();
 			$stmt->bind_result($user_query);
 				
@@ -150,7 +152,7 @@ if(isset($_GET['createuser'])){
 				
 				$stmt = $mysqli->prepare("UPDATE users SET username = ?, email = ?, firstname = ?, lastname = ?, role = ? WHERE id = ?");
 				echo($mysqli->error);
-				$stmt->bind_param('sssssi', $username, $email, $fname, $lname, $role, $_GET['edituser']);
+				$stmt->bind_param('sssssi', $username, $email, $fname, $lname, $role, $edituser);
 				$stmt->execute();
 				
 				$edituser_message = "User's account updated.";
@@ -202,7 +204,7 @@ if(isset($_GET['createuser'])){
 	
 	$stmt = $mysqli->prepare("SELECT name,url,location,host,type FROM servers WHERE id = ?");
 	echo($mysqli->error);
-	$stmt->bind_param('i', $_GET['editserver']);
+	$stmt->bind_param('i', $editserver);
 	$stmt->execute();
 	$stmt->bind_result($e_name,$e_url,$e_location,$e_host,$e_type);
 	$stmt->fetch();
@@ -221,7 +223,7 @@ if(isset($_GET['createuser'])){
 			//check for duplicates
 			$stmt = $mysqli->prepare("SELECT name FROM servers WHERE id <> ? AND name = ?");
 			echo($mysqli->error);
-			$stmt->bind_param('is', $_GET['editserver'],$name);
+			$stmt->bind_param('is', $editserver,$name);
 			$stmt->execute();
 			$stmt->bind_result($user_query);
 				
@@ -235,7 +237,7 @@ if(isset($_GET['createuser'])){
 				// Update the server
 				$stmt = $mysqli->prepare("UPDATE servers SET name = ?, url = ?, location = ?, host = ?, type = ? WHERE id = ?");
 				echo($mysqli->error);
-				$stmt->bind_param('sssssi', $name, $url, $location, $host, $type, $_GET['editserver']);
+				$stmt->bind_param('sssssi', $name, $url, $location, $host, $type, $editserver);
 				$stmt->execute();
 				
 				$editserver_message = "Server updated.";
@@ -363,16 +365,16 @@ function servers(){
 					<h1>Update Password</h1>
 					<ol class="breadcrumb">
 					  <li><a href="admin.php">Admin</a></li>
-					  <li><a href="admin.php?edituser=<?php echo($_GET['edituser']); ?>">Edit</a></li>
+					  <li><a href="admin.php?edituser=<?php echo($edituser); ?>">Edit</a></li>
 					  <li class="active">Password</li>
 					</ol>
 					<div class="well">
 						<?php echo($editpassword_message); ?>
-						<form class="form-signin" action="admin.php?edituser=<?php echo($_GET['edituser']); ?>&pass" method="post">
+						<form class="form-signin" action="admin.php?edituser=<?php echo($edituser); ?>&pass" method="post">
 							<div class="row">
 								<div class="col-sm-6">
 									<label for="name">New Password</label>
-									<input type="password" class="form-control" name="npass1" placeholder="New Password" required>
+									<input type="password" class="form-control" name="npass1" placeholder="New Password" required autofocus>
 								</div>
 								<div class="col-sm-6">
 									<label for="name">Confirm New Password</label>
@@ -386,18 +388,18 @@ function servers(){
 					
 					<?php }elseif(isset($_GET['edituser']) && $edituserfetch == True){ ?>
 					
-					<h1>Edit User <a href="<?php echo($basedir); ?>admin.php?edituser=<?php echo($_GET['edituser']); ?>&pass" class="btn btn-info btn-sm">Change Password</a></h1>
+					<h1>Edit User <a href="<?php echo($basedir); ?>admin.php?edituser=<?php echo($edituser); ?>&pass" class="btn btn-info btn-sm">Change Password</a></h1>
 					<ol class="breadcrumb">
 					  <li><a href="admin.php">Admin</a></li>
 					  <li class="active">Edit</li>
 					</ol>
 					<div class="well">
 						<?php echo($edituser_message); ?>
-						<form class="form-signin" action="admin.php?edituser=<?php echo($_GET['edituser']); ?>" method="post">
+						<form class="form-signin" action="admin.php?edituser=<?php echo($edituser); ?>" method="post">
 							<div class="row">
 								<div class="col-sm-6">
 									<label for="name">Username</label>
-									<input type="text" class="form-control" name="username" value="<?php echo($e_username); ?>" required autofocus>
+									<input type="text" class="form-control" name="username" value="<?php echo($e_username); ?>" required>
 								</div>
 								<div class="col-sm-6">
 									<label for="name">Email Address</label>
@@ -483,11 +485,11 @@ function servers(){
 					</ol>
 					<div class="well">
 						<?php echo($editserver_message); ?>
-						<form class="form-signin" action="admin.php?editserver=<?php echo($_GET['editserver']); ?>" method="post">
+						<form class="form-signin" action="admin.php?editserver=<?php echo($editserver); ?>" method="post">
 							<div class="row">
 								<div class="col-sm-6">
 									<label for="name">Name</label>
-									<input type="text" class="form-control" name="name" value="<?php echo($e_name); ?>" required autofocus>
+									<input type="text" class="form-control" name="name" value="<?php echo($e_name); ?>" required>
 								</div>
 								<div class="col-sm-6">
 									<label for="name">Type</label>
