@@ -1,6 +1,5 @@
 <?php
 // Basic Customization
-$name = "My Company";
 $refresh = "5000";
 $basedir = "/status/";
 

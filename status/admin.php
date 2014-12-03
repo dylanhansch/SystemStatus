@@ -76,6 +76,7 @@ if(isset($_GET['createuser'])){
 					$stmt->execute();
 					
 					$createuser_message = "User registered.";
+					header('Refresh: 2; URL='.$basedir.'admin.php');
 				}
 				$stmt->close();
 			}
@@ -106,6 +107,7 @@ if(isset($_GET['createuser'])){
 			$stmt->execute();
 			
 			$editpassword_message = "Password changed!";
+			header('Refresh: 2; URL='.$basedir.'admin.php?edituser='.$_GET['edituser']);
 		}
 		$stmt->close();
 	}
@@ -156,6 +158,7 @@ if(isset($_GET['createuser'])){
 				$stmt->execute();
 				
 				$edituser_message = "User's account updated.";
+				header('Refresh: 2; URL='.$basedir.'admin.php?edituser='.$_GET['edituser']);
 			}
 			$stmt->close();
 		}
@@ -194,6 +197,7 @@ if(isset($_GET['createuser'])){
 				$stmt->execute();
 				
 				$createserver_message = "Server ".$name." now being monitored.";
+				header('Refresh: 2; URL='.$basedir.'admin.php');
 			}
 			$stmt->close();
 		}
@@ -241,6 +245,7 @@ if(isset($_GET['createuser'])){
 				$stmt->execute();
 				
 				$editserver_message = "Server updated.";
+				header('Refresh: 2; URL='.$basedir.'admin.php?editserver='.$_GET['editserver']);
 			}
 			$stmt->close();
 		}
@@ -281,6 +286,38 @@ function servers(){
 	$stmt->close();
 	
 	return $servers;
+}
+
+// Delete user from application
+function del_user($user_id){
+	global $mysqli, $session_id;
+	
+	$stmt = $mysqli->prepare("DELETE FROM users WHERE id = ?");
+	echo($mysqli->error);
+	$stmt->bind_param("i", $user_id);
+	$stmt->execute();
+	$stmt->close();
+}
+
+if(isset($_GET['deluser'])){
+	del_user($_GET['deluser']);
+	header("Location: admin.php");
+}
+
+// Delete server from application
+function del_server($server_id){
+	global $mysqli, $session_id;
+	
+	$stmt = $mysqli->prepare("DELETE FROM servers WHERE id = ?");
+	echo($mysqli->error);
+	$stmt->bind_param("i", $server_id);
+	$stmt->execute();
+	$stmt->close();
+}
+
+if(isset($_GET['delserver'])){
+	del_server($_GET['delserver']);
+	header("Location: admin.php");
 }
 ?>
 <!DOCTYPE html>
@@ -530,6 +567,7 @@ function servers(){
 								<th>Host</th>
 								<th>Location</th>
 								<th>URL</th>
+								<th></th>
 							</tr>
 							<?php $servers = servers();
 							foreach($servers as $server): ?>
@@ -539,6 +577,7 @@ function servers(){
 								<td><?php echo($server['host']); ?></td>
 								<td><?php echo($server['location']); ?></td>
 								<td><?php echo($server['url']); ?></td>
+								<td><a href="?delserver=<?php echo($server['id']); ?>" onclick="return confirmation()"><span class="glyphicon glyphicon-remove"></span></a>
 							</tr>
 							<?php endforeach; ?>
 						</table>
@@ -550,12 +589,14 @@ function servers(){
 							<tr>
 								<th>Username</th>
 								<th>Role</th>
+								<th></th>
 							</tr>
 							<?php $users = users();
 							foreach($users as $user): ?>
 							<tr>
 								<td><?php echo('<a href="'.$basedir.'admin.php?edituser='.$user["id"].'">'.$user["username"].'</a>'); ?></td>
 								<td><?php echo($user['role']); ?></td>
+								<td><a href="?deluser=<?php echo($user['id']); ?>" onclick="return confirmation()"><span class="glyphicon glyphicon-remove"></span></a>
 							</tr>
 							<?php endforeach; ?>
 						</table>
@@ -571,6 +612,17 @@ function servers(){
 				<p class="text-muted" align="center"><a href="https://github.com/dylanhansch/SystemStatus">System Status</a> | &copy; 2014 <a href="http://dylanhansch.net">Dylan Hansch</a>. All rights reserved.</p>
 			</div>
 		</div>
+		
+		<script type="text/javascript">
+		function confirmation() {
+			var r = confirm("WARNING!\nThis action is perminate and non reversable. Are you sure you want to continue?");
+			if (r == true) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		</script>
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
