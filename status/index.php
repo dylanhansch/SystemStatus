@@ -49,18 +49,18 @@ function get_data($url){
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="well" style="margin-top:25px">
-						<table class="table table-striped">
+					<div class="content" style="margin-top:25px" id="content">
+						<table class="table table-striped table-condensed">
 							<tr>
-								<th>Status</th>
-								<th>Name</th>
-								<th>Type</th>
-								<th>Host</th>
-								<th>Location</th>
-								<th>Uptime</th>
-								<th>CPU Load</th>
-								<th>RAM (Free)</th>
-								<th>HDD (Free)</th>
+								<th id="status">Status</th>
+								<th id="name">Name</th>
+								<th id="type">Type</th>
+								<th id="host">Host</th>
+								<th id="location">Location</th>
+								<th id="uptime">Uptime</th>
+								<th id="load">CPU Load</th>
+								<th id="ram">RAM (Free)</th>
+								<th id="hdd">HDD (Free)</th>
 							</tr>
 							<?php $servers = servers();
 							foreach($servers as $server):
