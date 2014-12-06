@@ -29,6 +29,74 @@ function get_data($url){
   curl_close($ch);
   return $data;
 }
+
+function print_table(){ ?>
+	<table class="table table-striped table-condensed">
+		<tr>
+			<th id="status">Status</th>
+			<th id="name">Name</th>
+			<th id="type">Type</th>
+			<th id="host">Host</th>
+			<th id="location">Location</th>
+			<th id="uptime">Uptime</th>
+			<th id="load">CPU Load</th>
+			<th id="ram">RAM (Free)</th>
+			<th id="hdd">HDD (Free)</th>
+		</tr>
+		<?php $servers = servers();
+		foreach($servers as $server):
+		
+		$output = get_data($server['url']);
+		if(($output == NULL) || ($output === false)){
+			$data = array();
+			$data['uptime'] = '
+			<div class="progress">
+				<div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%;"><small>Down</small></div>
+			</div>
+			';
+			$data['load'] = '
+			<div class="progress">
+				<div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%;"><small>Down</small></div>
+			</div>
+			';
+			$data['online'] = '
+			<div class="progress">
+				<div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%;"><small>Down</small></div>
+			</div>
+			';
+			$data['memory'] = '
+			<div class="progress progress-striped active">
+				<div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%;"><small>n/a</small></div>
+			</div>
+			';
+			$data['hdd'] = '
+			<div class="progress progress-striped active">
+				<div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%;"><small>n/a</small></div>
+			</div>
+			';
+		}else{
+			$data = json_decode($output, true);
+		}
+		?>
+		<tr>
+			<td><?php echo($data['online']); ?></td>
+			<td><?php echo($server['name']); ?></td>
+			<td><?php echo($server['type']); ?></td>
+			<td><?php echo($server['host']); ?></td>
+			<td><?php echo($server['location']); ?></td>
+			<td><?php echo($data['uptime']); ?></td>
+			<td><?php echo($data['load']); ?></td>
+			<td><?php echo($data['memory']); ?></td>
+			<td><?php echo($data['hdd']); ?></td>
+		</tr>
+		<?php endforeach; ?>
+	</table>
+<?php }
+
+if(isset($_GET['reload'])){
+	print_table();
+	die();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -42,6 +110,20 @@ function get_data($url){
 		
 		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 		<link rel="stylesheet" href="style.css">
+		
+		<script>
+		function handle() {
+		document.getElementById("content").innerHTML = this.responseText;
+		setTimeout(reload, <?php echo($refresh); ?>);
+		}
+		function reload() {
+		var req = new XMLHttpRequest();
+		req.onload = handle;
+		req.open("get", "?reload", true);
+		req.send();
+		}
+		setTimeout(reload, <?php echo($refresh); ?>);
+		</script>
 	</head>
 	<body>
 		<?php include_once('navbar.php'); ?>
@@ -50,67 +132,9 @@ function get_data($url){
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="content" style="margin-top:25px" id="content">
-						<table class="table table-striped table-condensed">
-							<tr>
-								<th id="status">Status</th>
-								<th id="name">Name</th>
-								<th id="type">Type</th>
-								<th id="host">Host</th>
-								<th id="location">Location</th>
-								<th id="uptime">Uptime</th>
-								<th id="load">CPU Load</th>
-								<th id="ram">RAM (Free)</th>
-								<th id="hdd">HDD (Free)</th>
-							</tr>
-							<?php $servers = servers();
-							foreach($servers as $server):
-							
-							$output = get_data($server['url']);
-							if(($output == NULL) || ($output === false)){
-								$data = array();
-								$data['uptime'] = '
-								<div class="progress">
-									<div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%;"><small>Down</small></div>
-								</div>
-								';
-								$data['load'] = '
-								<div class="progress">
-									<div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%;"><small>Down</small></div>
-								</div>
-								';
-								$data['online'] = '
-								<div class="progress">
-									<div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%;"><small>Down</small></div>
-								</div>
-								';
-								$data['memory'] = '
-								<div class="progress progress-striped active">
-									<div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%;"><small>n/a</small></div>
-								</div>
-								';
-								$data['hdd'] = '
-								<div class="progress progress-striped active">
-									<div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%;"><small>n/a</small></div>
-								</div>
-								';
-							}else{
-								$data = json_decode($output, true);
-								$data["load"] = number_format($data["load"], 2);
-							}
-							?>
-							<tr>
-								<td><?php echo($data['online']); ?></td>
-								<td><?php echo($server['name']); ?></td>
-								<td><?php echo($server['type']); ?></td>
-								<td><?php echo($server['host']); ?></td>
-								<td><?php echo($server['location']); ?></td>
-								<td><?php echo($data['uptime']); ?></td>
-								<td><?php echo($data['load']); ?></td>
-								<td><?php echo($data['memory']); ?></td>
-								<td><?php echo($data['hdd']); ?></td>
-							</tr>
-							<?php endforeach; ?>
-						</table>
+						<?php
+						print_table();
+						?>
 					</div>
 				</div>
 			</div>
