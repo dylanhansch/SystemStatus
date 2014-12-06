@@ -11,6 +11,40 @@ function sec2human($time) {
 	return $days > 0 ? $days . ' day'.($days > 1 ? 's' : '') : $hours.':'.$mins.':'.$seconds;
 }
 
+// Get number of CPU cores in system
+function num_cpus(){
+	$numCpus = 1;
+	
+	if(is_file('/proc/cpuinfo')){
+		$cpuinfo = file_get_contents('/proc/cpuinfo');
+		preg_match_all('/^processor/m', $cpuinfo, $matches);
+		$numCpus = count($matches[0]);
+	}elseif('WIN' == strtoupper(substr(PHP_OS, 0, 3))){
+		$process = @popen('wmic cpu get NumberOfCores', 'rb');
+		
+		if(false !== $process){
+			fgets($process);
+			$numCpus = intval(fgets($process));
+			
+			pclose($process);
+		}
+	}else{
+		$process = @popen('sysctl -a', 'rb');
+		
+		if(false !== $process){
+			$output = stream_get_contents($process);
+			
+			preg_match('/hw.ncpu: (\d+)/', $output, $matches);
+			if($matches){
+				$numCpus = intval($matches[1][0]);
+			}
+			
+		pclose($process);
+		}
+	}
+	return $numCpus;
+}
+
 // System Uptime
 $fh = fopen('/proc/uptime', 'r');
 $uptime = fgets($fh);
@@ -57,9 +91,20 @@ $array['hdd'] = '<div class="progress progress-striped active">
 <div class="progress-bar progress-bar-'.$storageL.'" role="progressbar" style="width: '.$storage.';">'.$storage.'</div>
 </div>';
 
-// Temporary Load Average
-$load = sys_getloadavg();
-$array['load'] = $load[0];
+// CPU Load
+exec('ps -aux', $processes);
+foreach($processes as $process)
+{
+	$cols = split(' ', ereg_replace(' +', ' ', $process));
+	if (strpos($cols[2], '.') > -1)
+	{
+		$cpuUsage += floatval($cols[2]);
+	}
+}
+$cpuUsage = $cpuUsage / num_cpus().PHP_EOL;
+$cpuUsage = number_format((float)$cpuUsage, 2, '.', '');
+$cpuUsage = $cpuUsage.'%';
+$array['load'] = $cpuUsage;
 
 // If the server is online
 $array['online'] = '<div class="progress">
