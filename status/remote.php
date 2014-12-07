@@ -92,6 +92,7 @@ $array['hdd'] = '<div class="progress progress-striped active">
 </div>';
 
 // CPU Load
+$cpuUsage = "";
 exec('ps -aux', $processes);
 foreach($processes as $process)
 {

@@ -10,6 +10,11 @@ body {
   text-align:center;
 }
 
+.free {
+  margin:0px;
+  padding:0px;
+}
+
 .content {
   background:#ffffff;
   padding:20px;
