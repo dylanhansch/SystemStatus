@@ -25,12 +25,12 @@ if(isset($_SESSION['id'])){
 				<div class="collapse navbar-collapse navbar-ex1-collapse">
 					<ul class="nav navbar-nav pull-left">
 						<?php if($role == "admin"){ ?>
-						<li><a href="admin.php">Admin</a></li>
+						<li><a href="<?php echo($basedir); ?>admin/">Admin</a></li>
 						<?php } ?>
 					</ul>
 					<ul class="nav navbar-nav pull-right">
 						<?php if($logged == 0){ ?>
-						<li><a href="login.php">Login</a></li>
+						<li><a href="<?php echo($basedir); ?>login.php">Login</a></li>
 						<?php }else{ ?>
 						<li class="dropdown">
 							<a href="" class="dropdown-toggle" data-toggle="dropdown">Hello, <?php print($fname); ?> <b class="caret"></b></a>
