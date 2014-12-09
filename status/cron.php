@@ -22,10 +22,9 @@ function servers(){
 
 function get_data($url){
   $ch = curl_init();
-  $timeout = 1000;
   curl_setopt($ch, CURLOPT_URL, $url);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, $timeout);
+  curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
   $data = curl_exec($ch);
   curl_close($ch);
   return $data;
