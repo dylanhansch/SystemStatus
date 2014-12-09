@@ -80,7 +80,7 @@ function print_table(){ ?>
 		?>
 		<tr>
 			<td><?php echo($data['online']); ?></td>
-			<td><?php echo('<a href="server.php?id='.$server['id'].'">'.$server['name'].'</a>'); ?></td>
+			<td><?php echo($server['name']); ?></td>
 			<td><?php echo($server['type']); ?></td>
 			<td><?php echo($server['host']); ?></td>
 			<td><?php echo($server['location']); ?></td>

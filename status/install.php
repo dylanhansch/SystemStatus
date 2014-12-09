@@ -46,6 +46,33 @@ if(isset($_GET['pop'])){
 	$stmt->execute();
 	$stmt->close();
 	
+	$stmt = $mysqli->prepare("
+	CREATE TABLE `incidents` (
+		`id` int(11) NOT NULL AUTO_INCREMENT,
+		`server` int(11) NOT NULL,
+		`start` timestamp NOT NULL,
+		`end` timestamp,
+		`status` varchar(255),
+		PRIMARY KEY (`id`)
+	)
+	");
+	echo($mysqli->error);
+	$stmt->execute();
+	$stmt->close();
+	
+	$username = "admin";
+	$email = "webmaster@localhost";
+	$fname = "Admin";
+	$lname = "Admin";
+	$password = crypt("default123456");
+	$role = "admin";
+	
+	$stmt = $mysqli->prepare("INSERT INTO users (username, email, firstname, lastname, password, role) VALUES (?, ?, ?, ?, ?, ?)");
+	echo($mysqli->error);
+	$stmt->bind_param('ssssss', $username, $email, $fname, $lname, $password, $role);
+	$stmt->execute();
+	$stmt->close();
+	
 	header("Location: install.php?success");
 }
 ?>
@@ -72,6 +99,10 @@ if(isset($_GET['pop'])){
 					
 					<h1 style="color:green">Congrats!</h1>
 					<p>System Status is successfully installed, now you can start adding your servers so you can monitor them! :)</p>
+					<p><strong>Default Admin Login</strong></p>
+					<p><strong>Username:</strong> admin</p>
+					<p><strong>Password:</strong> default123456</p>
+					<p>Change the password and update the rest of the details before using this application</p>
 					
 					<h2 style="color:red">ALERT!</h2>
 					<p>You <strong>MUST</strong> remove install.php if you want this application to be secure! Failing to do so, <strong>WILL</strong> result in a loss of data once a malicious user comes along.</p>
