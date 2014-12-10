@@ -41,6 +41,22 @@ function servers(){
 	
 	return $servers;
 }
+
+function announcements(){
+	global $mysqli;
+	
+	$stmt = $mysqli->prepare("SELECT id,header,status,level FROM announcements ORDER BY id DESC");
+	echo($mysqli->error);
+	$stmt->execute();
+	$stmt->bind_result($out_id,$out_header,$out_status,$out_level);
+	$announcements = array();
+	while($stmt->fetch()){
+		$announcements[] = array('id' => $out_id, 'header' => $out_header, 'status' => $out_status, 'level' => $out_level);
+	}
+	$stmt->close();
+	
+	return $announcements;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -99,6 +115,27 @@ function servers(){
 							<tr>
 								<td><?php echo('<a href="'.$basedir.'admin/users.php?edit='.$user["id"].'">'.$user["username"].'</a>'); ?></td>
 								<td><?php echo($user['role']); ?></td>
+								<td><a href="users.php?del=<?php echo($user['id']); ?>" onclick="return confirmation()"><span class="glyphicon glyphicon-remove"></span></a>
+							</tr>
+							<?php endforeach; ?>
+						</table>
+					</div>
+					
+					<h1>Manage Announcements <a href="announcements.php?create" class="btn btn-sm btn-info">Create Announcement</a></h1>
+					<div class="well">
+						<table class="table table-striped">
+							<tr>
+								<th>Title</th>
+								<th>Level</th>
+								<th>Status</th>
+								<th></th>
+							</tr>
+							<?php $announcements = announcements();
+							foreach($announcements as $announcement): ?>
+							<tr>
+								<td><?php echo('<a href="'.$basedir.'admin/announcements.php?edit='.$announcement["id"].'">'.$announcement["header"].'</a>'); ?></td>
+								<td><?php echo($announcement['level']); ?></td>
+								<td><?php echo($announcement['status']); ?></td>
 								<td><a href="users.php?del=<?php echo($user['id']); ?>" onclick="return confirmation()"><span class="glyphicon glyphicon-remove"></span></a>
 							</tr>
 							<?php endforeach; ?>

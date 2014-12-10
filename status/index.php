@@ -30,19 +30,38 @@ function get_data($url){
   return $data;
 }
 
+function announcements(){
+	global $mysqli;
+	
+	$stmt = $mysqli->prepare("SELECT header,body,level FROM announcements WHERE status = 'active' ORDER BY id DESC");
+	echo($mysqli->error);
+	$stmt->execute();
+	$stmt->bind_result($out_header,$out_body,$out_level);
+	$announcements = array();
+	while($stmt->fetch()){
+		$announcements[] = array('header' => $out_header, 'body' => $out_body, 'level' => $out_level);
+	}
+	$stmt->close();
+	
+	return $announcements;
+}
+
 function print_table(){ ?>
 	<table class="table table-striped table-condensed">
-		<tr>
-			<th id="status">Status</th>
-			<th id="name">Name</th>
-			<th id="type">Type</th>
-			<th id="host">Host</th>
-			<th id="location">Location</th>
-			<th id="uptime">Uptime</th>
-			<th id="load">CPU Load</th>
-			<th id="ram">RAM (Free)</th>
-			<th id="hdd">HDD (Free)</th>
-		</tr>
+		<thead>
+			<tr>
+				<th id="status">Status</th>
+				<th id="name">Name</th>
+				<th id="type">Type</th>
+				<th id="host">Host</th>
+				<th id="location">Location</th>
+				<th id="uptime">Uptime</th>
+				<th id="load">CPU Load</th>
+				<th id="ram">RAM (Free)</th>
+				<th id="hdd">HDD (Free)</th>
+			</tr>
+		</thead>
+		<tbody>
 		<?php $servers = servers();
 		foreach($servers as $server):
 		
@@ -90,6 +109,7 @@ function print_table(){ ?>
 			<td><?php echo($data['hdd']); ?></td>
 		</tr>
 		<?php endforeach; ?>
+		</tbody>
 	</table>
 	
 <?php }
@@ -178,6 +198,23 @@ if(isset($_GET['reload'])){
 						print_table();
 						?>
 					</div>
+					
+					<?php $announcements = announcements();
+					foreach($announcements as $announcement){ ?>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="panel panel-<?php echo($announcement['level']); ?>">
+									<div class="panel-heading">
+										<h3 class="panel-title"><?php echo($announcement['header']); ?></h3>
+									</div>
+									<div class="panel-body">
+										<?php echo($announcement['body']); ?>
+									</div>
+								</div>
+							</div>
+						</div>
+					<?php } ?>
+					
 				</div>
 			</div>
 		</div>

@@ -60,6 +60,20 @@ if(isset($_GET['pop'])){
 	$stmt->execute();
 	$stmt->close();
 	
+	$stmt = $mysqli->prepare("
+	CREATE TABLE `announcements` (
+		`id` int(11) NOT NULL AUTO_INCREMENT,
+		`status` varchar(255) NOT NULL,
+		`header` varchar(255) NOT NULL,
+		`body` text NOT NULL,
+		`level` varchar(255),
+		PRIMARY KEY (`id`)
+	)
+	");
+	echo($mysqli->error);
+	$stmt->execute();
+	$stmt->close();
+	
 	$username = "admin";
 	$email = "webmaster@localhost";
 	$fname = "Admin";
