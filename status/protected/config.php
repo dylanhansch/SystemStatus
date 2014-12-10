@@ -1,6 +1,6 @@
 <?php
 // Basic Customization
-$refresh = "5000";
+$refresh = "6000";
 $basedir = "/status/";
 $support_url = "http://example.com/support";
 
