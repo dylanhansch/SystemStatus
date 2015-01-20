@@ -1,6 +1,6 @@
 <div id="footer">
 			<div class="container">
-				<p class="text-muted" align="center"><a href="https://github.com/dylanhansch/SystemStatus" target="_blank">System Status</a> | &copy; 2015 <a href="https://dylanhansch.net" target="_blank">Dylan Hansch</a>. All rights reserved.</p>
+				<p class="text-muted" align="center"><a href="https://github.com/dylanhansch/SystemStatus" target="_blank">System Status</a> | &copy; <?php echo(date("Y")); ?> <a href="https://dylanhansch.net" target="_blank">Dylan Hansch</a>. All rights reserved.</p>
 			</div>
 		</div>
 		
