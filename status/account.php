@@ -91,24 +91,6 @@ if(isset($_POST['pass'])){
 	}
 	$stmt->close();
 }
-
-function logins(){
-	global $mysqli;
-	
-	$stmt = $mysqli->prepare("SELECT ip_address,date FROM logins WHERE user = ? ORDER BY date DESC");
-	echo($mysqli->error);
-	$stmt->bind_param('i', $_SESSION['id']);
-	$stmt->execute();
-	$stmt->bind_result($out_ip,$out_date);
-	$logins = array();
-	
-	while($stmt->fetch()){
-		$logins[] = array('ip' => $out_ip, 'date' => $out_date);
-	}
-	$stmt->close();
-	
-	return $logins;
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -183,23 +165,6 @@ function logins(){
 					
 					<h1>Hey there <?php echo($fname); ?>!</h1>
 					<a href="?view=edit" class="btn btn-primary" role="button">Edit Account</a> <a href="?view=pass" class="btn btn-primary" role="button">Change Password</a>
-					<br>
-					<div class="row col-lg-6 col-md-6 col-sm-6">
-						<h2>Places you've logged in</h2>
-						<table class="table table-striped">
-							<tr>
-								<th>IP Address</th>
-								<th>Date</th>
-							</tr>
-							<?php $logins = logins();
-							foreach($logins as $login): ?>
-							<tr class="tickets">
-								<td><?php echo($login['ip']); ?></td>
-								<th><?php echo($login['date']); ?></th>
-							</tr>
-							<?php endforeach; ?>
-						</table>
-					</div>
 					
 					<?php } ?>
 				</div>

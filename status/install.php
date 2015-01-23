@@ -34,19 +34,6 @@ if(isset($_GET['pop'])){
 	$stmt->close();
 	
 	$stmt = $mysqli->prepare("
-	CREATE TABLE `logins` (
-		`id` int(11) NOT NULL AUTO_INCREMENT,
-		`user` int(11) NOT NULL,
-		`date` timestamp NOT NULL,
-		`ip_address` varchar(15),
-		PRIMARY KEY (`id`)
-	)
-	");
-	echo($mysqli->error);
-	$stmt->execute();
-	$stmt->close();
-	
-	$stmt = $mysqli->prepare("
 	CREATE TABLE `incidents` (
 		`id` int(11) NOT NULL AUTO_INCREMENT,
 		`server` int(11) NOT NULL,
