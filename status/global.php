@@ -64,3 +64,13 @@ $stmt->execute();
 $stmt->bind_result($role);
 $stmt->fetch();
 $stmt->close();
+
+function get_data($url){
+	$Context = stream_context_create(array(
+		'http' => array(
+			'method' => 'GET',
+			'timeout' => 1,
+		)
+	));
+	return file_get_contents($url, false, $Context);
+}

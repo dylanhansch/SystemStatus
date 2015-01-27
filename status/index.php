@@ -19,17 +19,6 @@ function servers(){
 	return $servers;
 }
 
-function get_data($url){
-  $ch = curl_init();
-  $timeout = 500;
-  curl_setopt($ch, CURLOPT_URL, $url);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, $timeout);
-  $data = curl_exec($ch);
-  curl_close($ch);
-  return $data;
-}
-
 function announcements(){
 	global $mysqli;
 	
@@ -128,7 +117,7 @@ function isOperational(){
 			$flag = False;
 		}
 	}
-	endforeach;	
+	endforeach;
 }
 
 if(isset($_GET['reload'])){
