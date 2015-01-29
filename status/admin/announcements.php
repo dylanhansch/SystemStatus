@@ -3,7 +3,7 @@ require_once("../protected/config.php");
 require_once("../global.php");
 
 if($logged == 0){
-	header("Location: login.php");
+	header("Location: ../login.php");
 }elseif($role != "admin"){
 	die("You must be an admin or staff member to access this page.");
 }
