@@ -5,14 +5,14 @@ require_once("global.php");
 function servers(){
 	global $mysqli;
 	
-	$stmt = $mysqli->prepare("SELECT id,name,location,host,type,url FROM servers ORDER BY id");
+	$stmt = $mysqli->prepare("SELECT id,name,location,type,url FROM servers ORDER BY id");
 	echo($mysqli->error);
 	$stmt->execute();
-	$stmt->bind_result($out_id,$out_name,$out_location,$out_host,$out_type,$out_url);
+	$stmt->bind_result($out_id,$out_name,$out_location,$out_type,$out_url);
 	$servers = array();
 	
 	while($stmt->fetch()){
-		$servers[] = array('id' => $out_id, 'name' => $out_name, 'location' => $out_location, 'host' => $out_host, 'type' => $out_type, 'url' => $out_url);
+		$servers[] = array('id' => $out_id, 'name' => $out_name, 'location' => $out_location, 'type' => $out_type, 'url' => $out_url);
 	}
 	$stmt->close();
 	
@@ -42,7 +42,6 @@ function print_table(){ ?>
 				<th id="status">Status</th>
 				<th id="name">Name</th>
 				<th id="type">Type</th>
-				<th id="host">Host</th>
 				<th id="location">Location</th>
 				<th id="uptime">Uptime</th>
 				<th id="load">CPU Load</th>
@@ -90,7 +89,6 @@ function print_table(){ ?>
 			<td><?php echo($data['online']); ?></td>
 			<td><?php echo($server['name']); ?></td>
 			<td><?php echo($server['type']); ?></td>
-			<td><?php echo($server['host']); ?></td>
 			<td><?php echo($server['location']); ?></td>
 			<td><?php echo($data['uptime']); ?></td>
 			<td><?php echo($data['load']); ?></td>

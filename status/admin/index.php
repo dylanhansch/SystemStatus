@@ -28,14 +28,14 @@ function users(){
 function servers(){
 	global $mysqli;
 	
-	$stmt = $mysqli->prepare("SELECT id,name,url,location,host,type FROM servers ORDER BY id");
+	$stmt = $mysqli->prepare("SELECT id,name,url,location,type FROM servers ORDER BY id");
 	echo($mysqli->error);
 	$stmt->execute();
-	$stmt->bind_result($out_id,$out_name,$out_url,$out_location,$out_host,$out_type);
+	$stmt->bind_result($out_id,$out_name,$out_url,$out_location,$out_type);
 	$servers = array();
 	
 	while($stmt->fetch()){
-		$servers[] = array('id' => $out_id, 'name' => $out_name, 'url' => $out_url, 'location' => $out_location, 'host' => $out_host, 'type' => $out_type);
+		$servers[] = array('id' => $out_id, 'name' => $out_name, 'url' => $out_url, 'location' => $out_location, 'type' => $out_type);
 	}
 	$stmt->close();
 	
@@ -83,7 +83,6 @@ function announcements(){
 							<tr>
 								<th>Name</th>
 								<th>Type</th>
-								<th>Host</th>
 								<th>Location</th>
 								<th>URL</th>
 								<th></th>
@@ -93,7 +92,6 @@ function announcements(){
 							<tr>
 								<td><?php echo('<a href="'.$basedir.'admin/servers.php?edit='.$server['id'].'">'.$server['name'].'</a>'); ?></td>
 								<td><?php echo($server['type']); ?></td>
-								<td><?php echo($server['host']); ?></td>
 								<td><?php echo($server['location']); ?></td>
 								<td><?php echo($server['url']); ?></td>
 								<td><a href="servers.php?del=<?php echo($server['id']); ?>" onclick="return confirmation()"><span class="glyphicon glyphicon-remove"></span></a>

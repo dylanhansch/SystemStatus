@@ -27,10 +27,9 @@ if(isset($_GET['create'])){
 		$name = $_POST['name'];
 		$url = $_POST['url'];
 		$location = $_POST['location'];
-		$host = $_POST['host'];
 		$type = $_POST['type'];
 		
-		if( (!$name) || (!$url) || (!$location) || (!$host) || (!$type) ){
+		if( (!$name) || (!$url) || (!$location) || (!$type) ){
 			$createserver_message = "Please complete all the fields below.";
 		}else{
 			//check for duplicates
@@ -47,9 +46,9 @@ if(isset($_GET['create'])){
 				$stmt->close();
 				
 				// Insert into servers
-				$stmt = $mysqli->prepare("INSERT INTO servers (name, url, location, host, type) VALUES (?, ?, ?, ?, ?)");
+				$stmt = $mysqli->prepare("INSERT INTO servers (name, url, location, type) VALUES (?, ?, ?, ?)");
 				echo($mysqli->error);
-				$stmt->bind_param('sssss', $name, $url, $location, $host, $type);
+				$stmt->bind_param('ssss', $name, $url, $location, $type);
 				$stmt->execute();
 				
 				$createserver_message = "Server ".$name." now being monitored.";
@@ -62,11 +61,11 @@ if(isset($_GET['create'])){
 	$title = "Edit Server";
 	$editserver_message = "";
 	
-	$stmt = $mysqli->prepare("SELECT name,url,location,host,type FROM servers WHERE id = ?");
+	$stmt = $mysqli->prepare("SELECT name,url,location,type FROM servers WHERE id = ?");
 	echo($mysqli->error);
 	$stmt->bind_param('i', $editserver);
 	$stmt->execute();
-	$stmt->bind_result($e_name,$e_url,$e_location,$e_host,$e_type);
+	$stmt->bind_result($e_name,$e_url,$e_location,$e_type);
 	$stmt->fetch();
 	$stmt->close();
 	
@@ -74,10 +73,9 @@ if(isset($_GET['create'])){
 		$name = $_POST['name'];
 		$url = $_POST['url'];
 		$location = $_POST['location'];
-		$host = $_POST['host'];
 		$type = $_POST['type'];
 		
-		if( (!$name) || (!$url) || (!$location) || (!$host) || (!$type) ){
+		if( (!$name) || (!$url) || (!$location) || (!$type) ){
 			$createserver_message = "Please complete all the fields below.";
 		}else{
 			//check for duplicates
@@ -95,9 +93,9 @@ if(isset($_GET['create'])){
 				$stmt->close();
 				
 				// Update the server
-				$stmt = $mysqli->prepare("UPDATE servers SET name = ?, url = ?, location = ?, host = ?, type = ? WHERE id = ?");
+				$stmt = $mysqli->prepare("UPDATE servers SET name = ?, url = ?, location = ?, type = ? WHERE id = ?");
 				echo($mysqli->error);
-				$stmt->bind_param('sssssi', $name, $url, $location, $host, $type, $editserver);
+				$stmt->bind_param('ssssi', $name, $url, $location, $type, $editserver);
 				$stmt->execute();
 				
 				$editserver_message = "Server updated.";
@@ -169,17 +167,10 @@ if(isset($_GET['del'])){
 							<br>
 							<div class="row">
 								<div class="col-sm-6">
-									<label for="name">Host</label>
-									<input type="text" class="form-control" name="host" placeholder="Ex. Advantage Servers" required>
-								</div>
-								<div class="col-sm-6">
 									<label for="name">Location</label>
 									<input type="text" class="form-control" name="location" placeholder="Ex. Hudson, WI" required>
 								</div>
-							</div>
-							<br>
-							<div class="row">
-								<div class="col-sm-12">
+								<div class="col-sm-6">
 									<label for="name">URL to remote.php on server</label>
 									<input type="text" class="form-control" name="url" placeholder="Ex. http://example.com/remote.php" required>
 								</div>
@@ -212,17 +203,10 @@ if(isset($_GET['del'])){
 							<br>
 							<div class="row">
 								<div class="col-sm-6">
-									<label for="name">Host</label>
-									<input type="text" class="form-control" name="host" value="<?php echo($e_host); ?>" required>
-								</div>
-								<div class="col-sm-6">
 									<label for="name">Location</label>
 									<input type="text" class="form-control" name="location" value="<?php echo($e_location); ?>" required>
 								</div>
-							</div>
-							<br>
-							<div class="row">
-								<div class="col-sm-12">
+								<div class="col-sm-6">
 									<label for="name">URL to remote.php on server</label>
 									<input type="text" class="form-control" name="url" value="<?php echo($e_url); ?>" required>
 								</div>
