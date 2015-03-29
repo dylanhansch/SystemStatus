@@ -72,9 +72,13 @@ fclose($fh);
 $memoryM = $memoryC + $memoryF;
 $memoryM2 = $memoryM / $memoryT * 100;
 $memory = round($memoryM2) . '%';
-if ($memory >= "51%") { $memoryL = "success"; }
-elseif ($memory <= "50%") { $memoryL = "warning"; }
-elseif ($memory <= "35%") { $memoryL = "danger"; }
+if($memory >= "51%"){
+	$memoryL = "success";
+}elseif($memory <= "25%"){
+	$memoryL = "danger";
+}elseif($memory <= "50%"){
+	$memoryL = "warning";
+}
 $array['memory'] = '<div class="progress progress-striped active">
 <div class="progress-bar progress-bar-'.$memoryL.'" role="progressbar" style="width: '.$memory.';">'.$memory.'</div>
 </div>';
@@ -84,9 +88,13 @@ $storageT = disk_total_space("/");
 $storageF = disk_free_space("/");
 $storageM = $storageF / $storageT * 100;
 $storage = round($storageM) . '%';
-if ($storage >= "51%") { $storageL = "success"; }
-elseif ($storage <= "50%") { $storageL = "warning"; }
-elseif ($storage <= "35%") { $storageL = "danger"; }
+if($storage >= "51%"){
+	$storageL = "success";
+}elseif($storage <= "25%"){
+	$storageL = "danger";
+}elseif($storage <= "50%"){
+	$storageL = "warning";
+}
 $array['hdd'] = '<div class="progress progress-striped active">
 <div class="progress-bar progress-bar-'.$storageL.'" role="progressbar" style="width: '.$storage.';">'.$storage.'</div>
 </div>';
