@@ -45,8 +45,8 @@ function print_table(){ ?>
 				<th id="location">Location</th>
 				<th id="uptime">Uptime</th>
 				<th id="load">CPU Load</th>
-				<th id="ram">RAM (Free)</th>
-				<th id="hdd">HDD (Free)</th>
+				<th id="ram">Memory (Free)</th>
+				<th id="hdd">Storage (Free)</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -171,7 +171,7 @@ if(isset($_GET['reload'])){
 								<div class="col-sm-8 pull-left">
 									<h2 style="inline-block" class="free">
 									<img src="<?php echo($basedir); ?>img/success.png" style="vertical-align:middle;">
-									All Systems Operational</h2>
+									Everything's Online!</h2>
 									<p style="padding-left:58px">If you are experiencing any issues please open a support ticket.</p>
 								</div>
 								<div class="col-sm-4 pull-right">
