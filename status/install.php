@@ -1,9 +1,9 @@
 <?php
-require_once("protected/config.php");
+include_once("protected/config.php");
 
 if(isset($_GET['pop'])){
 	$stmt = $mysqli->prepare("
-	CREATE TABLE `servers` (
+	CREATE TABLE IF NOT EXISTS `servers` (
 		`id` int(11) NOT NULL AUTO_INCREMENT,
 		`name` varchar(65) NOT NULL,
 		`url` varchar(255) NOT NULL,
@@ -18,7 +18,7 @@ if(isset($_GET['pop'])){
 	$stmt->close();
 	
 	$stmt = $mysqli->prepare("
-	CREATE TABLE `users` (
+	CREATE TABLE IF NOT EXISTS `users` (
 		`id` int(11) NOT NULL AUTO_INCREMENT,
 		`username` varchar(24) NOT NULL,
 		`email` varchar(255) NOT NULL,
@@ -34,7 +34,7 @@ if(isset($_GET['pop'])){
 	$stmt->close();
 	
 	$stmt = $mysqli->prepare("
-	CREATE TABLE `incidents` (
+	CREATE TABLE IF NOT EXISTS `incidents` (
 		`id` int(11) NOT NULL AUTO_INCREMENT,
 		`server` int(11) NOT NULL,
 		`start` timestamp NOT NULL,
@@ -48,7 +48,7 @@ if(isset($_GET['pop'])){
 	$stmt->close();
 	
 	$stmt = $mysqli->prepare("
-	CREATE TABLE `announcements` (
+	CREATE TABLE IF NOT EXISTS `announcements` (
 		`id` int(11) NOT NULL AUTO_INCREMENT,
 		`status` varchar(255) NOT NULL,
 		`header` varchar(255) NOT NULL,
@@ -88,11 +88,8 @@ if(isset($_GET['pop'])){
 		<link rel="shortcut icon" content="none">
 		
 		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-		<link rel="stylesheet" href="style.css">
 	</head>
 	<body>
-		<?php include_once('navbar.php'); ?>
-		
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
@@ -120,13 +117,22 @@ if(isset($_GET['pop'])){
 					
 					<h3>Step 3.</h3>
 					<p>Populate the database with necessary tables.</p>
-					<a href="?pop" class="btn btn-warning">Populate Database</a>
+					<a href="?pop" class="btn btn-warning" onclick="return confirmation()">Populate Database</a>
 					
 					<?php } ?>
 				</div>
 			</div>
 		</div>
 		
-		<?php include_once('footer.php'); ?>
+		<script type="text/javascript">
+		function confirmation() {
+			var r = confirm("WARNING!\nThis action is perminate and non reversable. Are you sure you want to continue?");
+			if (r == true) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		</script>
 	</body>
 </html>
