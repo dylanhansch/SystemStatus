@@ -1,7 +1,7 @@
 <?php
 session_name("systemstatus");
 session_start();
-include_once("protected/config.php");
+include_once('protected/config.php');
 
 //checking is the sessions are set
 if(isset($_SESSION['username']) && isset($_SESSION['pass']) && isset($_SESSION['id'])){

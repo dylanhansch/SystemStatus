@@ -1,6 +1,6 @@
 <?php
-require_once("protected/config.php");
-require_once("global.php");
+include_once('protected/config.php');
+include_once('global.php');
 
 if(isset($_SESSION['id'])){
 	$stmt = $mysqli->prepare("SELECT firstname,role FROM `users` WHERE `id` = ?");
