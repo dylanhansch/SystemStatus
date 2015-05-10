@@ -72,31 +72,39 @@ fclose($fh);
 $memoryM = $memoryC + $memoryF;
 $memoryM2 = $memoryM / $memoryT * 100;
 $memory = round($memoryM2) . '%';
-if($memory >= "51%"){
+$memD = $memory;
+$memory = sprintf("%02d", $memory);
+$memory = $memory."%";
+if($memory >= "26%"){
 	$memoryL = "success";
-}elseif($memory <= "25%"){
+}elseif($memory <= "10%"){
 	$memoryL = "danger";
-}elseif($memory <= "50%"){
+	$memTC = "black";
+}elseif($memory <= "25%"){
 	$memoryL = "warning";
 }
 $array['memory'] = '<div class="progress progress-striped active">
-<div class="progress-bar progress-bar-'.$memoryL.'" role="progressbar" style="width: '.$memory.';">'.$memory.'</div>
+<div class="progress-bar progress-bar-'.$memoryL.'" role="progressbar" style="width: '.$memory.'; color: '.$memTC.';">'.$memD.'</div>
 </div>';
 
 // Storage (Disk)
-$storageT = disk_total_space("/");
-$storageF = disk_free_space("/");
+$storageT = disk_total_space("/home/");
+$storageF = disk_free_space("/home/");
 $storageM = $storageF / $storageT * 100;
 $storage = round($storageM) . '%';
+$storageD = $storage;
+$storage = sprintf("%02d", $storage);
+$storage = $storage."%";
 if($storage >= "51%"){
 	$storageL = "success";
 }elseif($storage <= "25%"){
 	$storageL = "danger";
+	$storageTC = "black";
 }elseif($storage <= "50%"){
 	$storageL = "warning";
 }
 $array['hdd'] = '<div class="progress progress-striped active">
-<div class="progress-bar progress-bar-'.$storageL.'" role="progressbar" style="width: '.$storage.';">'.$storage.'</div>
+<div class="progress-bar progress-bar-'.$storageL.'" role="progressbar" style="width: '.$storage.'; color: '.$storageTC.';">'.$storage.'</div>
 </div>';
 
 // CPU Load
@@ -113,7 +121,11 @@ foreach($processes as $process)
 $cpuUsage = $cpuUsage / num_cpus().PHP_EOL;
 $cpuUsage = number_format((float)$cpuUsage, 2, '.', '');
 $cpuUsage = $cpuUsage.'%';
-$array['load'] = $cpuUsage;
+//$array['load'] = $cpuUsage;
+$loadavg = sys_getloadavg();
+$loadavg = $loadavg[0];
+$loadavg = number_format((float)$loadavg, 2, '.', '');
+$array['load'] = $loadavg;
 
 // If the server is online
 $array['online'] = '<div class="progress">
