@@ -134,7 +134,7 @@ function announcements(){
 								<td><?php echo('<a href="'.$basedir.'admin/announcements.php?edit='.$announcement["id"].'">'.$announcement["header"].'</a>'); ?></td>
 								<td><?php echo($announcement['level']); ?></td>
 								<td><?php echo($announcement['status']); ?></td>
-								<td><a href="users.php?del=<?php echo($user['id']); ?>" onclick="return confirmation()"><span class="glyphicon glyphicon-remove"></span></a>
+								<td><a href="announcements.php?del=<?php echo($announcement['id']); ?>" onclick="return confirmation()"><span class="glyphicon glyphicon-remove"></span></a>
 							</tr>
 							<?php endforeach; ?>
 						</table>

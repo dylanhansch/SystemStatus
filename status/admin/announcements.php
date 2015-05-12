@@ -102,6 +102,22 @@ if(isset($_GET['create'])){
 }else{
 	header("Location: ".$basedir."admin/");
 }
+
+// Delete announcement from application
+function del_announcement($announcement_id){
+	global $mysqli;
+	
+	$stmt = $mysqli->prepare("DELETE FROM announcements WHERE id = ?");
+	echo($mysqli->error);
+	$stmt->bind_param("i", $announcement_id);
+	$stmt->execute();
+	$stmt->close();
+}
+
+if(isset($_GET['del'])){
+	del_announcement($_GET['del']);
+	header("Location: ".$basedir."admin/");
+}
 ?>
 <!DOCTYPE html>
 <html>
