@@ -44,7 +44,7 @@ function print_table(){ ?>
 				<th id="type">Type</th>
 				<th id="location">Location</th>
 				<th id="uptime">Uptime</th>
-				<th id="load">CPU Load</th>
+				<th id="load">Load Avg.</th>
 				<th id="ram">Memory (Free)</th>
 				<th id="hdd">Storage (Free)</th>
 			</tr>
