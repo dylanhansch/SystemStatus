@@ -1,6 +1,8 @@
 <?php
 // Data setup
 $array = array();
+$memTC = null;
+$storageTC = null;
 
 // Change Unix timestamp to Human timestamp
 function sec2human($time) {
