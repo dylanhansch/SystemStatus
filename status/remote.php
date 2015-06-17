@@ -90,8 +90,8 @@ $array['memory'] = '<div class="progress progress-striped active">
 </div>';
 
 // Storage (Disk)
-$storageT = disk_total_space("/home/");
-$storageF = disk_free_space("/home/");
+$storageT = disk_total_space("/");
+$storageF = disk_free_space("/");
 $storageM = $storageF / $storageT * 100;
 $storage = round($storageM) . '%';
 $storageD = $storage;
