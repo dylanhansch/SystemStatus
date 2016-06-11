@@ -1,6 +1,6 @@
 <?php
 include_once('protected/config.php');
-include_once('global.php');
+include_once('inc/global.php');
 
 function servers(){
 	global $mysqli;
@@ -127,14 +127,8 @@ if(isset($_GET['reload'])){
 <html>
 	<head>
 		<title>System Status</title>
-		<meta charset="utf-8">
-		<meta name="author" content="Dylan Hansch">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-		<link rel="shortcut icon" content="none">
 		
-		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-		<link rel="stylesheet" href="style.css">
+		<?php include_once('inc/page-head.php'); ?>
 		
 		<script>
 		function handle() {
@@ -151,7 +145,7 @@ if(isset($_GET['reload'])){
 		</script>
 	</head>
 	<body>
-		<?php include_once('navbar.php'); ?>
+		<?php include_once('inc/header.php'); ?>
 		
 		<div class="container">
 			<div class="row">
@@ -206,6 +200,6 @@ if(isset($_GET['reload'])){
 			</div>
 		</div>
 		
-		<?php include_once('footer.php'); ?>
+		<?php include_once('inc/footer.php'); ?>
 	</body>
 </html>
