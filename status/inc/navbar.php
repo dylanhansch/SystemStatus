@@ -1,5 +1,5 @@
 <?php
-include_once('protected/config.php');
+include_once('../protected/config.php');
 include_once('global.php');
 
 if(isset($_SESSION['id'])){
@@ -11,7 +11,7 @@ if(isset($_SESSION['id'])){
 	$stmt->close();
 }
 ?>
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-default" role="navigation">
 			<div class="container">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -29,9 +29,7 @@ if(isset($_SESSION['id'])){
 						<?php } ?>
 					</ul>
 					<ul class="nav navbar-nav pull-right">
-						<?php if($logged == 0){ ?>
-						<li><a href="<?php echo($basedir); ?>login.php">Login</a></li>
-						<?php }else{ ?>
+						<?php if($logged == 1){ ?>
 						<li class="dropdown">
 							<a href="" class="dropdown-toggle" data-toggle="dropdown">Hello, <?php print($fname); ?> <b class="caret"></b></a>
 							<ul class="dropdown-menu">
