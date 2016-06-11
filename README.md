@@ -8,7 +8,7 @@ System Status is an extensive system and network monitoring tool.
 Installation
 ============
 
-1. Fork a copy of this repository and upload all the files in the folder called "status" to the desired web directory.
+1. Download the latest stable release from https://github.com/dylanhansch/SystemStatus/releases/latest and upload the files do the desired directory on your website. (Example: /status/)
 2. Edit the config.php accordingly.
 3. Navigate to your SystemStatus installation through a web browser and follow the installation instructions. (http://example.com/status/install.php)
 4. Place "remote.php" on each server you want to monitor in a place that's accessible to the web.
