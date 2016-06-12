@@ -74,3 +74,31 @@ header h1 {
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
+
+header a:link,
+header a:visited,
+header a:hover,
+header a:active {
+	text-decoration: none;
+	color: #424242;
+}
+
+.overall-status {
+	border-radius: 5px;
+}
+
+.overall-status-good {
+	background-color: #27ae60;
+}
+
+.overall-status-bad {
+	background-color: #c0392b;
+}
+
+.overall-status p {
+	color: #fff;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	font-size: 150%;
+}

@@ -148,56 +148,46 @@ if(isset($_GET['reload'])){
 		<?php include_once('inc/header.php'); ?>
 		
 		<div class="container">
+			<div class="row" style="padding-top:25px;">
+				<div class="col-md-2"></div>
+				<?php isOperational();
+				
+				if ($flag == true) { ?>
+					<div class="col-md-8">
+						<div class="overall-status overall-status-bad">
+							<p>An incident has been detected!</p>
+						</div>
+					</div>
+				<?php } else { ?>
+					<div class="col-md-8">
+						<div class="overall-status overall-status-good">
+							<p>All Systems Operational</p>
+						</div>
+					</div>
+				<?php } ?>
+			</div>
+			
+			<div class="content" style="margin-top:25px" id="content">
+				<?php
+				print_table();
+				?>
+			</div>
+			
+			<?php $announcements = announcements();
+			foreach($announcements as $announcement){ ?>
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="well" style="margin-top:25px;">
-						<div class="row">
-							<?php isOperational(); ?>
-							
-							<?php if($flag == True){ ?>
-								<div class="col-lg-12 pull-left">
-									<h2 style="inline-block" class="free">
-									<img src="<?php echo($basedir); ?>img/error.png" style="vertical-align:middle;">
-									System Outage/Disruption</h2>
-									<p style="padding-left:58px">No need to contact support, we've been automatically notified of this incident and awesome technicians are working on resolving the issue.</p>
-								</div>
-							<?php }else{ ?>
-								<div class="col-sm-8 pull-left">
-									<h2 style="inline-block" class="free">
-									<img src="<?php echo($basedir); ?>img/success.png" style="vertical-align:middle;">
-									Everything's Online!</h2>
-									<p style="padding-left:58px">If you are experiencing any issues please open a support ticket.</p>
-								</div>
-								<div class="col-sm-4 pull-right">
-									<a href="<?php echo($support_url); ?>" class="btn btn-default btn-primary" style="float:right;">Contact Support</a>
-								</div>
-							<?php } ?>
+					<div class="panel panel-<?php echo($announcement['level']); ?>">
+						<div class="panel-heading">
+							<h3 class="panel-title"><?php echo($announcement['header']); ?></h3>
+						</div>
+						<div class="panel-body">
+							<?php echo($announcement['body']); ?>
 						</div>
 					</div>
-					<div class="content" style="margin-top:25px" id="content">
-						<?php
-						print_table();
-						?>
-					</div>
-					
-					<?php $announcements = announcements();
-					foreach($announcements as $announcement){ ?>
-						<div class="row">
-							<div class="col-lg-12">
-								<div class="panel panel-<?php echo($announcement['level']); ?>">
-									<div class="panel-heading">
-										<h3 class="panel-title"><?php echo($announcement['header']); ?></h3>
-									</div>
-									<div class="panel-body">
-										<?php echo($announcement['body']); ?>
-									</div>
-								</div>
-							</div>
-						</div>
-					<?php } ?>
-					
 				</div>
 			</div>
+			<?php } ?>
 		</div>
 		
 		<?php include_once('inc/footer.php'); ?>
