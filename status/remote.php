@@ -109,21 +109,7 @@ $array['hdd'] = '<div class="progress progress-striped active">
 <div class="progress-bar progress-bar-'.$storageL.'" role="progressbar" style="width: '.$storage.'; color: '.$storageTC.';">'.$storage.'</div>
 </div>';
 
-// CPU Load
-$cpuUsage = "";
-exec('ps -aux', $processes);
-foreach($processes as $process)
-{
-	$cols = split(' ', ereg_replace(' +', ' ', $process));
-	if (strpos($cols[2], '.') > -1)
-	{
-		$cpuUsage += floatval($cols[2]);
-	}
-}
-$cpuUsage = $cpuUsage / num_cpus().PHP_EOL;
-$cpuUsage = number_format((float)$cpuUsage, 2, '.', '');
-$cpuUsage = $cpuUsage.'%';
-//$array['load'] = $cpuUsage;
+// CPU Load Average
 $loadavg = sys_getloadavg();
 $loadavg = $loadavg[0];
 $loadavg = number_format((float)$loadavg, 2, '.', '');
