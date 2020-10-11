@@ -1,7 +1,9 @@
 SystemStatus
 ============
 
-System Status is an extensive system and network monitoring tool.
+I am no longer maintaining this, and it no longer reflects my current abilities or style. As such, I have archived this repo.
+
+System Status is an extensive system and network monitoring tool. This includes a bunch of improvements I made on-top of [mojeda's ServerStatus](https://github.com/mojeda/ServerStatus).
 
 ![Screenshot](http://i.imgur.com/Q3z0kDq.jpg)
 
